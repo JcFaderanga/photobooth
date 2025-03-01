@@ -13,13 +13,14 @@
   align-items: center;
 }
 
+
 .video-preview {
-  width: 100%;
-  max-width: 400px;
+  width: 300px;  /* Set square width */
+  height: 300px; /* Set square height */
+  object-fit: cover; /* Crop to fill the box */
   border: 2px solid #000;
   border-radius: 10px;
 }
-
 .captured-image {
   width: 100%;
   max-width: 400px;
