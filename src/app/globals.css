@@ -1,24 +1,28 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.camera-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+.video-preview {
+  width: 100%;
+  max-width: 400px;
+  border: 2px solid #000;
+  border-radius: 10px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.captured-image {
+  width: 100%;
+  max-width: 400px;
+  border: 2px solid #000;
+  border-radius: 10px;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+button {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
 }
