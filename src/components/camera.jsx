@@ -43,7 +43,7 @@ const Camera = () => {
       const videoHeight = video.videoHeight;
       const size = Math.min(videoWidth, videoHeight);
       
-      const outputSize = 1000; // Higher resolution for better quality
+      const outputSize = 1500; // Higher resolution for better quality
       
       canvas.width = outputSize;
       canvas.height = outputSize;
@@ -74,7 +74,7 @@ const Camera = () => {
                     ref={videoRef}
                     autoPlay
                     playsInline
-                    className={`w-[500px] h-[500px] object-cover border-black rounded-lg ${isInverted ? "scale-x-[-1]" : ""}`}
+                    className={`w-[500px] h-[500px] object-cover border-black px-4 rounded-xl ${isInverted ? "scale-x-[-1]" : ""}`}
                 />
                 <div className="mt-2 flex justify-center gap-4">
                     <button

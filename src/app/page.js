@@ -6,12 +6,11 @@ export default function Home() {
 const { gallery} = useGallery();
 return (
     <>
-    <h1>Take a Photo & Download</h1>
-        <div className="lg:flex">
-                <div className=" lg:w-1/2 flex justify-center"> 
+        <div className="h-screen w-full lg:flex bg-slate-100">
+                <div className="h-full lg:w-1/2 flex justify-center items-center"> 
                     <Camera />
                 </div>
-            <div className=" lg:w-1/2 flex justify-center"> 
+            <div className=" lg:w-1/2 flex justify-center items-center"> 
             {gallery.length > 0 &&  <Gallery />}
             </div>
         </div>

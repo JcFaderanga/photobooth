@@ -9,48 +9,56 @@ const Gallery = () => {
 
     useEffect(() => {
         if (gallery.length === 0) return;
-
+    
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
-
+    
         // Use device pixel ratio for best quality
-        const scaleFactor = window.devicePixelRatio || 2; // Auto scale based on screen
-        const imgWidth = 150 * scaleFactor;
-        const imgHeight = 150 * scaleFactor;
+        const scaleFactor = window.devicePixelRatio || 2; 
+        const imgWidth = 170 * scaleFactor;
+        const imgHeight = 170 * scaleFactor;
         const gap = 10 * scaleFactor;
         const padding = 20 * scaleFactor;
+        const textHeight = 40 * scaleFactor; // Space for "PicaBooth" footer
         const cols = 2;
         const orderedGallery = isReversed ? gallery.slice().reverse() : gallery;
-
+    
         const rows = Math.ceil(orderedGallery.length / cols);
         canvas.width = cols * (imgWidth + gap) - gap + 2 * padding;
-        canvas.height = rows * (imgHeight + gap) - gap + 2 * padding;
-
+        canvas.height = rows * (imgHeight + gap) - gap + 2 * padding + textHeight; // Add space for text
+    
         canvas.style.width = `${canvas.width / scaleFactor}px`;
         canvas.style.height = `${canvas.height / scaleFactor}px`;
         ctx.scale(scaleFactor, scaleFactor);
         ctx.imageSmoothingEnabled = false;
-
+    
         // Fill background with light blue
         ctx.fillStyle = "#ADD8E6";
         ctx.fillRect(0, 0, canvas.width / scaleFactor, canvas.height / scaleFactor);
-
+    
         // Load and draw images
         orderedGallery.forEach((item, index) => {
             const image = new Image();
             image.src = item;
             image.crossOrigin = "anonymous";
-
+    
             const col = index % cols;
             const row = Math.floor(index / cols);
             const x = col * (imgWidth + gap) / scaleFactor + padding / scaleFactor;
             const y = row * (imgHeight + gap) / scaleFactor + padding / scaleFactor;
-
+    
             image.onload = () => {
                 ctx.drawImage(image, x, y, imgWidth / scaleFactor, imgHeight / scaleFactor);
             };
         });
+    
+        // Draw "PicaBooth" footer
+        ctx.fillStyle = "black";
+        ctx.font = `${20 * (scaleFactor / 1)}px poppins`;
+        ctx.textAlign = "center";
+        ctx.fillText("March 3, 2025 9:20PM", canvas.width / (2 * scaleFactor), canvas.height / scaleFactor - 15);
     }, [gallery, isReversed]);
+    
 
     // Download the high-quality merged image
     const downloadMergedImage = () => {
@@ -74,10 +82,10 @@ const Gallery = () => {
     };
 
     return (
-        <div className="text-center">
+        <div className="text-center mx-auto">
             <h1 className="font-bold text-2xl mb-4">Picabooth</h1>
             <h2 className="font-bold mt-5">Captured Photos</h2>
-            <canvas ref={canvasRef} className="border border-black my-2 p-4"></canvas>
+            <canvas ref={canvasRef} className="border border-black my-2 p-4 mx-auto"></canvas>
             <div className="flex justify-center gap-4 mt-4">
                 <button
                     onClick={() => setIsReversed(!isReversed)}
