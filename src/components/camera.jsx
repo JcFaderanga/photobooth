@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import React,{ useCallback, useEffect, useRef, useState } from "react";
 import { useGallery } from "@/context/galleryContext";
-export default function Camera() {
+import { StartCamera } from "@/utils";
+
+const Camera =()=> {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const { gallery, setGallery } = useGallery();
-  const [photo, setPhoto] = useState(null);
-
+  const { gallery, setGallery, photo, setPhoto} = useGallery();
+ console.log('this is use Ref',canvasRef.current)
 
   useEffect(() => {
     // Load saved photos from localStorage on page load
@@ -16,23 +17,19 @@ export default function Camera() {
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoRef.current) {
+      if (videoRef?.current) {
         videoRef.current.srcObject = stream;
       }
-
-      setTimeout(() => {
-        setPhoto(null);
-      }, 3000);
-
+         setPhoto(null);
     } catch (error) {
       console.error("Error accessing camera:", error);
       alert("Could not access camera. Please check permissions.");
     }
   };
+ 
+    startCamera();
 
-  startCamera();
-
-  const takePhoto = () => {
+  const takePhoto = useCallback(() => {
     const canvas = canvasRef.current;
     const video = videoRef.current;
     if (!canvas || !video) return;
@@ -63,7 +60,7 @@ export default function Camera() {
     const updatedGallery = [imageUrl, ...gallery];
     setGallery(updatedGallery);
     localStorage.setItem("photoGallery", JSON.stringify(updatedGallery));
-  };
+  });
   
 
   return (
@@ -79,7 +76,7 @@ export default function Camera() {
             />
           </>
         ) : (
-            <img 
+            <img
               src={photo} 
               alt="Captured" 
               className="w-full max-w-[320px] border-black rounded-[10px]" 
@@ -91,8 +88,11 @@ export default function Camera() {
         >
           Take Photo
         </button>
-        <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+      
+        <canvas ref={canvasRef} className="hidden"></canvas>
       </div>
     </div>
   );
 }
+
+export default React.memo(Camera);

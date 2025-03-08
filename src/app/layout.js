@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { GalleryProvider } from "@/context/galleryContext"; // Import the correct provider
-
+import { ReactScan } from "@/utils/reactScan";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -20,6 +20,7 @@ export const metadata = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
+      <ReactScan />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <GalleryProvider>
           {children}

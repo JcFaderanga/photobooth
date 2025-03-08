@@ -7,6 +7,7 @@ const GalleryContext = createContext();
 // GalleryProvider component to provide the context
 export const GalleryProvider = ({ children }) => {
     const [gallery, setGallery] = useState([]);
+    const [photo, setPhoto] = useState(null);
 
     useEffect(() => {
         const savedPhotos = JSON.parse(localStorage.getItem("photoGallery")) || [];
@@ -14,7 +15,7 @@ export const GalleryProvider = ({ children }) => {
     }, []);
 
     return (
-        <GalleryContext.Provider value={{ gallery, setGallery }}>
+        <GalleryContext.Provider value={{ gallery, setGallery,photo, setPhoto }}>
             {children}
         </GalleryContext.Provider>
     );
