@@ -1,12 +1,13 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { useGallery } from "@/context/galleryContext";
-
+import { canvasBg } from "@/utils";
 const Gallery = () => {
     const { gallery, setGallery } = useGallery();
     const [isReversed, setIsReversed] = useState(true); // Toggle inversion
+    const [bgColor, setBgColor] = useState("#ADD8E6");
     const canvasRef = useRef(null);
-
+    console.log(canvasBg.blue);
     useEffect(() => {
         if (gallery.length === 0) return;
     
@@ -33,7 +34,7 @@ const Gallery = () => {
         ctx.imageSmoothingEnabled = false;
     
         // Fill background with light blue
-        ctx.fillStyle = "#ADD8E6";
+        ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, canvas.width / scaleFactor, canvas.height / scaleFactor);
     
         // Load and draw images
@@ -54,10 +55,10 @@ const Gallery = () => {
     
         // Draw "PicaBooth" footer
         ctx.fillStyle = "black";
-        ctx.font = `${20 * (scaleFactor / 1)}px poppins`;
+        ctx.font = `${20 * (scaleFactor / 2)}px arial`;
         ctx.textAlign = "center";
         ctx.fillText("March 3, 2025 9:20PM", canvas.width / (2 * scaleFactor), canvas.height / scaleFactor - 15);
-    }, [gallery, isReversed]);
+    }, [gallery, isReversed,bgColor]);
     
 
     // Download the high-quality merged image
@@ -86,7 +87,7 @@ const Gallery = () => {
             <h1 className="font-bold text-2xl mb-4">Picabooth</h1>
             <h2 className="font-bold mt-5">Captured Photos</h2>
             <canvas ref={canvasRef} className="border border-black my-2 p-4 mx-auto"></canvas>
-            <div className="flex justify-center gap-4 mt-4">
+            <div className="flex justify-between mt-4">
                 <button
                     onClick={() => setIsReversed(!isReversed)}
                     className="bg-gray-500 text-white px-4 py-2 rounded-lg"
@@ -105,6 +106,20 @@ const Gallery = () => {
                 >
                     Reset
                 </button>
+            </div>
+            <div className="mt-4 font-bold">
+                <h2 >Select background color</h2>
+                <div className="flex justify-center gap-2">
+                    {Object.values(canvasBg).map((color, index) => (
+                        <button 
+                            key={index} 
+                            className="h-12 w-12 rounded-xl" 
+                            style={{ backgroundColor: color }}
+                            onClick={() => setBgColor(color)}
+                        >
+                        </button>
+                    ))}
+                </div>
             </div>
         </div>
     );

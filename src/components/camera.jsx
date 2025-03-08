@@ -5,8 +5,12 @@ const Camera = () => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const { gallery, setGallery } = useGallery();
+    const [timer, setTimer] = useState(3);
+    const [photoCount, setPhotoCount] = useState(4);
+    console.log(timer);
+    const [isCountingDown, setIsCountingDown] = useState(false);
     const [isInverted, setIsInverted] = useState(false);
-
+ console.log(timer);
     useEffect(() => {
         const savedPhotos = JSON.parse(localStorage.getItem("photoGallery")) || [];
         setGallery(savedPhotos);
@@ -43,7 +47,7 @@ const Camera = () => {
       const videoHeight = video.videoHeight;
       const size = Math.min(videoWidth, videoHeight);
       
-      const outputSize = 1500; // Higher resolution for better quality
+      const outputSize = 1200; // Higher resolution for better quality
       
       canvas.width = outputSize;
       canvas.height = outputSize;
@@ -65,17 +69,50 @@ const Camera = () => {
       localStorage.setItem("photoGallery", JSON.stringify(updatedGallery));
   });
   
+  const takePhotoWithTimer = useCallback(() => {
+    if (isCountingDown) return; // Prevent multiple triggers
+
+    setIsCountingDown(true);
+    let countdown = timer;
+
+    const interval = setInterval(() => {
+        if (countdown > 1) {
+            countdown -= 1;
+            setTimer(countdown);
+        } else {
+            clearInterval(interval);
+            takePhoto();
+            setIsCountingDown(false);
+            setTimer(3); // Reset timer after photo
+        }
+    }, 1000);
+}, [timer, takePhoto]);
+
+
+    const takeMultiplePhotos = () => {
+      
+       takePhotoWithTimer(); 
+     
+    
+    };
   
 
     return (
         <div className="text-center">
             <div className="mx-auto max-w-[500px]">
-                <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    className={`w-[500px] h-[500px] object-cover border-black px-4 rounded-xl ${isInverted ? "scale-x-[-1]" : ""}`}
-                />
+                <div className="relative">
+                  {isCountingDown &&
+                      <div className="absolute h-full w-full flex justify-center items-center">
+                          <h1 className=" text-[200px] font-bold text-white">{timer}</h1>
+                      </div>
+                  }
+                    <video
+                          ref={videoRef}
+                          autoPlay
+                          playsInline
+                          className={`w-[500px] h-[500px] object-cover border-black px-4 rounded-xl ${isInverted ? "scale-x-[-1]" : ""}`}
+                      />
+                </div>
                 <div className="mt-2 flex justify-center gap-4">
                     <button
                         onClick={takePhoto}
@@ -89,6 +126,33 @@ const Camera = () => {
                     >
                         {isInverted ? "Normal Camera" : "Invert Camera"}
                     </button>
+                </div>
+                
+                <div className="mt-4">
+                    <button
+                      onClick={takeMultiplePhotos}
+                      className="rounded-xl bg-blue-300 font-bold px-4 py-2"
+                    >
+                        Set Timer
+                    </button>
+                    <select
+                        className="px-4 py-2 mx-2 bg-slate-100 rounded-xl border"
+                        value={timer}
+                        onChange={(e) => setTimer(Number(e.target.value))}
+                    >
+                        <option value="3">3s</option>
+                        <option value="5">5s</option>
+                        <option value="10">10s</option>
+                    </select>
+                    {/* <select
+                        className="px-4 py-2 bg-slate-100 rounded-xl border"
+                        value={photoCount}
+                        onChange={(e) => setPhotoCount(Number(e.target.value))}
+                    >
+                        <option value="4">4 picture</option>
+                        <option value="6">6 picture</option>
+                    </select> */}
+                   
                 </div>
                 <canvas ref={canvasRef} className="hidden"></canvas>
             </div>

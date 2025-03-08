@@ -1,4 +1,4 @@
 import { DownloadPhoto } from "./downloadPhoto";
 import { StartCamera } from "./startCamera";
-
-export { DownloadPhoto, StartCamera };
+import { canvasBg } from "./canvas-bg";
+export { DownloadPhoto, StartCamera, canvasBg };
