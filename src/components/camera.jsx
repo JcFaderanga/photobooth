@@ -89,12 +89,6 @@ const Camera = () => {
 }, [timer, takePhoto]);
 
 
-    const takeMultiplePhotos = () => {
-      
-       takePhotoWithTimer(); 
-     
-    
-    };
   
 
     return (
@@ -130,7 +124,7 @@ const Camera = () => {
                 
                 <div className="mt-4">
                     <button
-                      onClick={takeMultiplePhotos}
+                      onClick={takePhotoWithTimer}
                       className="rounded-xl bg-blue-300 font-bold px-4 py-2"
                     >
                         Set Timer
